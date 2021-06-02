@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_open_customer_order">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr style="border-bottom: 1px solid black;">
+                                <th>Order Number</th>
+                                <th class="text-center">Line No.</th>
+                                <th>Item No.<br/>Description</th>
+                                <th class="text-center">Whse</th>
+                                <th class="text-center">Qty. Order</th>
+                                <th class="text-center">Qty. Shipped</th>
+                                <th class="text-center">Qty. Picked</th>
+                                <th class="text-center">Qty. Allocated</th>
+                                <th class="text-center">Qty. Required</th>
+                                <th class="text-center">UOM</th>
+                                <th class="text-center">Delivery Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="lines" t-as="l">
+                                <tr>
+                                    <td><span t-field="l.order_id.name"/></td>
+                                    <td><span t-field="l.sequence"/></td>
+                                    <td><span t-field="l.product_id.default_code"/><br/><span t-field="l.product_id.name"/></td>
+                                    <td>EXCNJ</td>
+                                    <td><span t-field="l.product_uom_qty"/></td>
+                                    <td><span t-field="l.qty_delivered"/></td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td><span t-esc="l.product_uom_qty - l.qty_delivered"/></td>
+                                    <td><span t-field="l.product_uom"/></td>
+                                    <td><span t-field="l.order_id.commitment_date"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

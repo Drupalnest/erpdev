@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <!--remove print options "Invoices, Invoices without Payment" under the "Print" drop-down of invoice form-->
+        <function model="ir.actions.report" name="unlink_action">
+            <value eval="[ref('account.account_invoices'), ref('account.account_invoices_without_payment')]"/>
+        </function>
+
+        <!-- Allow updating invoice mail template -->
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'account'), ('name', '=', 'email_template_edi_invoice')]"/>
+            </function>
+            <value eval="{'noupdate': False}"/>
+        </function>
+
+        <!--Linking the new invoice to button "Send &amp; Print"-->
+        <record id="account.email_template_edi_invoice" model="mail.template">
+            <field name="report_template" ref="staples_account.account_invoices_staples"/>
+        </record>
+
+        <!-- Revoke updating change for invoice mail template-->
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'account'), ('name', '=', 'email_template_edi_invoice')]"/>
+            </function>
+            <value eval="{'noupdate': True}"/>
+        </function>
+    </data>
+</odoo>

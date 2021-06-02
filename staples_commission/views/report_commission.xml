@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_commission">
+        <!--        <t t-call="web.html_container">-->
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <t t-foreach="docs" t-as="o">
+                    <div class="row">
+                        <div class="col-3">
+                            <div>
+                                <b>Printed on:</b>
+                                <span t-esc="datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')"/>
+                            </div>
+                        </div>
+                        <div class="col-6 text-center">
+                            <h2>COMMISSION REPORT (SUMMARY)</h2>
+                            <div>Division:
+                                <span t-field="o.release_id.company_id"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div>
+                                <b>Report:</b>
+                                <span t-field="o.release_id"/>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-borderless">
+                        <thead style="border-bottom: 5px double;">
+                            <tr>
+                                <th>Invoice No.</th>
+                                <th class="text-center">Invoice Date</th>
+                                <th class="text-center">Split</th>
+                                <th class="text-right" style="width: 115px;">Sales</th>
+                                <th class="text-right" style="width: 115px;">Cost</th>
+                                <th class="text-right" style="width: 115px;">G.M.</th>
+                                <th class="text-right" style="width: 115px;">G.M. %</th>
+                                <th class="text-right" style="width: 115px;">Comm%</th>
+                                <th class="text-right" style="width: 115px;">Commission</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th colspan="9">
+                                    <span><span style="margin-right: 10px;">Sales Rep.</span>:
+                                        <span><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;]]>
+                                            <span t-field="o.agent_id.ref"/>
+                                        </span>
+                                        <span><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;]]>
+                                            <span t-field="o.agent_id"/>
+                                        </span>
+                                    </span>
+                                </th>
+                            </tr>
+                            <t t-set="partners" t-value="o.commission_invoice_ids.mapped('partner_id')"/>
+                            <t t-foreach="partners" t-as="p">
+                                <tr>
+                                    <th colspan="9">
+                                        <span><span style="margin-right: 10px;">Customer</span>:
+                                            <span><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;]]>
+                                                <span t-field="p.ref"/>
+                                            </span>
+                                            <span><![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;]]>
+                                                <span t-field="p.name"/>
+                                            </span>
+                                        </span>
+                                    </th>
+                                </tr>
+                                <t t-set="lines"
+                                   t-value="o.commission_invoice_ids.filtered(lambda x: x.partner_id.id == p.id)"/>
+                                <t t-foreach="lines" t-as="l">
+                                    <tr>
+                                        <td>
+                                            <span class="ml-3" t-field="l.name"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="l.invoice_date"/>
+                                        </td>
+                                        <td class="text-center">N</td>
+                                        <td class="text-right">
+                                            <span t-field="l.amount_total"/>
+                                        </td>
+                                        <td class="text-right">0.00</td>
+                                        <td class="text-right">
+                                            <span t-field="l.amount_total"/>
+                                        </td>
+                                        <td class="text-right">100%</td>
+                                        <td class="text-right"><span t-field="l.commission"/>%
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="l.amount_commission"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <th>
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th>CUSTOMER TOTAL</th>
+                                    <th class="text-right">
+                                        <span class="d-block comm_total" t-esc="sum(lines.mapped('amount_total'))"
+                                              t-options='{"widget": "monetary", "display_currency": o.release_id.currency_id}'/>
+                                    </th>
+                                    <th class="text-right">
+                                        <span class="d-block comm_total">0.00</span>
+                                    </th>
+                                    <th class="text-right">
+                                        <span class="d-block comm_total" t-esc="sum(lines.mapped('amount_total'))"
+                                              t-options='{"widget": "monetary", "display_currency": o.release_id.currency_id}'/>
+                                    </th>
+                                    <th class="text-right">
+                                        <span class="d-block comm_total">100%</span>
+                                    </th>
+                                    <th class="text-right">
+                                        <span class="d-block comm_total"><span t-field="o.agent_id.commission"/>%
+                                        </span>
+                                    </th>
+                                    <th class="text-right">
+                                        <span class="d-block comm_total" t-esc="sum(lines.mapped('amount_commission'))"
+                                              t-options='{"widget": "monetary", "display_currency": o.release_id.currency_id}'/>
+                                    </th>
+                                </tr>
+                            </t>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>
+                                </th>
+                                <th>SALESREP TOTAL</th>
+                                <th class="text-right">
+                                    <span class="d-block comm_total"
+                                          t-esc="sum(o.commission_invoice_ids.mapped('amount_total'))"
+                                          t-options='{"widget": "monetary", "display_currency": o.release_id.currency_id}'/>
+                                </th>
+                                <th class="text-right">
+                                    <span class="d-block comm_total">0.00</span>
+                                </th>
+                                <th class="text-right">
+                                    <span class="d-block comm_total"
+                                          t-esc="sum(o.commission_invoice_ids.mapped('amount_total'))"
+                                          t-options='{"widget": "monetary", "display_currency": o.release_id.currency_id}'/>
+                                </th>
+                                <th class="text-right">
+                                    <span class="d-block comm_total">100%</span>
+                                </th>
+                                <th class="text-right">
+                                    <span class="d-block comm_total"><span t-field="o.agent_id.commission"/>%
+                                    </span>
+                                </th>
+                                <th class="text-right">
+                                    <span class="d-block comm_total"
+                                          t-esc="sum(o.commission_invoice_ids.mapped('amount_commission'))"
+                                          t-options='{"widget": "monetary", "display_currency": o.release_id.currency_id}'/>
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+            </div>
+        </t>
+        <!--        </t>-->
+    </template>
+</odoo>

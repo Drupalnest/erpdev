@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="sale_commission_make_invoice_form" model="ir.ui.view">
+            <field name="name">Make invoices</field>
+            <field name="model">make.invoice.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Make invoices">
+                    <group colspan="2">
+                        <field name="journal_id"/>
+                        <field name="company_id"/>
+                        <field name="product_id"/>
+                    </group>
+                    <footer>
+                        <button
+                                name="button_create"
+                                string="Create invoices"
+                                type="object"
+                                class="oe_highlight"
+                        />
+                        or
+                        <button special="cancel" string="_Cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <act_window
+                id="action_commission_make_invoices"
+                name="Create commission invoices"
+                res_model="make.invoice.wizard"
+                view_mode="form"
+                target="new"
+        />
+    </data>
+</odoo>

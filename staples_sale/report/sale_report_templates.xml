@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+        <!--checks any of the sale order line has taxes with amount not equal to zero.-->
+        <xpath expr="//div[hasclass('page')]/div[hasclass('oe_structure')]" position="after">
+            <t t-set="has_taxes" t-value="any(t.amount for t in doc.order_line.mapped('tax_id'))"/>
+        </xpath>
+        <!--remove the tax header in order line's table-->
+        <th name="th_taxes" position="attributes">
+            <attribute name="t-if">has_taxes</attribute>
+        </th>
+        <!--remove the tax data in order line's table-->
+        <td name="td_taxes" position="attributes">
+            <attribute name="t-if">has_taxes</attribute>
+        </td>
+        <!--remove the taxes total bottom-->
+        <t t-foreach="doc.amount_by_group" position="attributes">
+            <attribute name="t-if">has_taxes</attribute>
+        </t>
+    </template>
+</odoo>

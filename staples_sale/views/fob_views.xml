@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="fob_form_view" model="ir.ui.view">
+            <field name="name">fob.form</field>
+            <field name="model">fob</field>
+            <field name="arch" type="xml">
+                <form string="FOB form view">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="code"/>
+                        </group>
+                        <div>
+                            <label for="comment"/>
+                            <field name="comment"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="fob_tree_view" model="ir.ui.view">
+            <field name="name">fob.tree</field>
+            <field name="model">fob</field>
+            <field name="arch" type="xml">
+                <tree string="FOB list view">
+                    <field name="code"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="fob_search_view" model="ir.ui.view">
+            <field name="name">fob.search</field>
+            <field name="model">fob</field>
+            <field name="arch" type="xml">
+                <search string="FOB search view">
+                    <field name="name"/>
+                    <field name="code"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="fob_act_window" model="ir.actions.act_window">
+            <field name="name">FOB</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fob</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="FOB" id="fob_menu" parent="sale.menu_sale_config" action="fob_act_window"/>
+
+    </data>
+</odoo>

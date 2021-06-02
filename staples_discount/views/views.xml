@@ -1,0 +1,55 @@
+<odoo>
+    <data>
+        <record id="sale_discount_view_form" model="ir.ui.view">
+            <field name="name">sale_discount_view_form</field>
+            <field name="model">sale.discount</field>
+            <field name="arch" type="xml">
+                <form string="sale_discount_form">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="discount_percent"/>
+                            <field name="description"/>
+                        </group>
+                        <div>
+                            <label for="comment"/>
+                            <field name="comment"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="sale_discount_view_tree" model="ir.ui.view">
+            <field name="name">sale_discount_view_tree</field>
+            <field name="model">sale.discount</field>
+            <field name="arch" type="xml">
+                <tree string="sale_discount_tree">
+                    <field name="name"/>
+                    <field name="discount_percent"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="sale_discount_search_view" model="ir.ui.view">
+            <field name="name">sale_discount_view_search</field>
+            <field name="model">sale.discount</field>
+            <field name="arch" type="xml">
+                <search string="Discount search view">
+                    <field name="name"/>
+                    <field name="description"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="sale_discount_action" model="ir.actions.act_window">
+            <field name="name">Discounts</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.discount</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="sale_discount_menu" name="Discounts" parent="sale.menu_sale_config" action="sale_discount_action"
+                  sequence=""/>
+    </data>
+</odoo>

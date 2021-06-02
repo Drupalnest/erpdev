@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_picking">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="staples_web.picking_operations_layout">
+                    <t t-set="order_barcode">
+                        <img alt="barcode"
+                             t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;humanreadable=%s' % ('Code128', o.sale_id.name, 1)"/>
+                    </t>
+                    <div class="page" style="font-size:14px;">
+                        <div class="row mt-1">
+                            <div class="col-6">
+                                <strong>Ship To:</strong>
+                                <div t-field="o.sale_id.partner_shipping_id"
+                                     t-options="{'widget': 'contact', 'fields': ['address', 'name'], 'no_marker': True}"/>
+                                <div class="w-100 mt-2"/>
+                                <strong>Bill To:</strong>
+                                <div t-field="o.sale_id.partner_invoice_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Order Date<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span t-field="o.sale_id.date_order"
+                                              t-options='{"widget": "date"}'/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Customer No.<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span t-field="o.sale_id.partner_id.ref"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Cust. Ord. No.<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span t-field="o.sale_id.client_order_ref"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Date Required<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span t-field="o.sale_id.commitment_date"
+                                              t-options='{"widget": "date"}'/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Ship via<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span/>
+                                        <span t-field="o.sale_id.shipvia_id"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>FOB Code<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span/>
+                                        <span t-field="o.sale_id.fob_id"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Terms<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span/>
+                                        <span t-field="o.sale_id.payment_term_id"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Delivery Order<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span/>
+                                        <span t-field="o.name"/>
+                                        <t t-if="len(o.sale_id.picking_ids) > 1 and o.sale_id.picking_ids[-1].id != o.id">
+                                            <![CDATA[&nbsp;]]>(BO)
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Salesman<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <t t-if="o.sale_id.partner_id.agent_id">
+                                            <span t-field="o.sale_id.partner_id.agent_id"/>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2" style="width: 865px; font-size: 12px; line-height: 2.3em;">
+                            <div class="x_header border border-bottom-0 border-dark" style="font-weight: bold;">
+                                <div class="d-flex flex-row">
+                                  <div style="width: 50px;">
+                                     <span class="pl-1">LINE</span>
+                                  </div>
+                                  <div class="d-flex flex-row">
+                                     <div class="" style="width: 165px;"><span>STYLE CODE</span></div>
+                                     <div class="text-center" style="width: 139px;"><span>U/M</span></div>
+                                     <div class="pr-1 text-right" style="width: 125px;"><span>QTY ORDERED</span></div>
+                                  </div>
+                                  <div style="position: relative;width: 82px;" class="text-center border-left border-dark">
+                                     <span style="position: relative;top: 50%;">QTY SHIPPED</span>
+                                  </div>
+                                  <div style="width: 302px;" class="text-center border-left border-bottom border-dark">
+                                     <span style="">SHIPPED PIECES X YARDS</span>
+                                  </div>
+                                </div>
+                                <div class="d-flex flex-row">
+                                  <div style="width: 50px;" class="border-top border-dark"></div>
+                                  <div style="min-width: 430px;" class="border-top border-right border-dark">DESCRIPTION</div>
+                                  <div style="margin-left: 81px;width: 302px;" class="d-flex flex-row">
+                                     <div class="text-center border-left border-dark" style="width: 75px;">CTN. NO.</div>
+                                     <div class="border-left border-dark" style="width: 75px;"></div>
+                                     <div class="text-center border-left border-dark" style="width: 75px;">CTN. NO.</div>
+                                     <div class="border-left border-dark" style="width: 75px;"></div>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <div class="x_body">
+                                <t t-set="lines" t-value="[o.move_ids_without_package[i:i+12] for i in range(0, len(o.move_ids_without_package), 12)]"/>
+                                <t t-set="l_count" t-value="1"/>
+                                <t t-foreach="lines" t-as="nl">
+                                    <t t-set="empty_rows" t-value="12-len(nl)"/>
+                                    <t t-foreach="nl" t-as="l">
+                                        <t t-set="x_row_class" t-value="'x_row border border-dark' if (empty_rows &lt;= 0) and nl[-1] == l else 'x_row border border-dark border-bottom-0'"/>
+                                        <t t-call="staples_stock.picking_line"/>
+                                        <t t-set="l_count" t-value="l_count + 1"/>
+                                    </t>
+                                    <t t-if="empty_rows > 0" t-foreach="range(empty_rows)" t-as="i">
+                                        <t t-set="x_row_class" t-value="'x_row border border-dark' if (i + 1) == empty_rows else 'x_row border border-dark border-bottom-0'"/>
+                                        <t t-call="staples_stock.dummy_rows"/>
+                                    </t>
+                                    <t t-call="staples_stock.picking_footer"/>
+                                    <p t-if="nl != lines[-1]" style="page-break-after:always;"/>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <i><span t-field="o.note"/></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="picking_line">
+        <div t-att-class="x_row_class">
+            <div class="d-flex flex-row">
+                <div style="width: 50px;">
+                    <span class="pl-1" t-esc="l_count"/>
+                </div>
+                <div class="d-flex flex-row">
+                    <div class="" style="width: 165px;"><span t-field="l.product_id.default_code"/></div>
+                    <div class="text-center" style="width: 139px;"><span t-field="l.product_uom"/></div>
+                    <div class="text-center" style="width: 125px;"><span class="pr-1" t-esc="'{0:.2f}'.format(l.product_uom_qty)"/></div>
+                </div>
+                <div style="position: relative;width: 82px;" class="text-center border-left border-dark">
+                    <span style="position: relative;top: 50%;"></span>
+                </div>
+                <div style="width: 302px;" class="d-flex flex-row">
+                    <div class="text-center border-left border-dark" style="width: 75px;"></div>
+                    <div class="border-left border-dark" style="width: 75px;"></div>
+                    <div class="text-center border-left border-dark" style="width: 75px;"></div>
+                    <div class="border-left border-dark" style="width: 75px;"></div>
+                </div>
+            </div>
+            <div class="d-flex flex-row">
+                <div style="width: 50px;"></div>
+                <div style="min-width: 430px;" class="border-right border-dark"><span t-field="l.product_id.name"/></div>
+                <div style="margin-left: 81px;width: 302px;" class="d-flex flex-row">
+                    <div class="text-center border-left border-dark" style="width: 75px;"></div>
+                    <div class="border-left border-dark" style="width: 75px;"></div>
+                    <div class="text-center border-left border-dark" style="width: 75px;"></div>
+                    <div class="border-left border-dark" style="width: 75px;"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="picking_footer">
+        <div class="d-flex flex-row">
+            <div style="height:70px;width: 215px;" class="border border-top-0 border-dark">TOTAL PACKAGES</div>
+            <div style="height:70px;width: 136px;" class="border border-top-0 border-left-0 border-dark">ORDER COMPLETED</div>
+            <div style="height:70px;width: 130px;" class="border border-top-0 border-left-0 border-dark">BALANCE TO FOLLOW</div>
+            <div style="height:70px;width: 157px;" class="border border-top-0 border-left-0 border-dark">PULLED BY</div>
+            <div style="height:70px;width: 227px;" class="border border-top-0 border-left-0 border-dark">PACKED BY</div>
+        </div>
+    </template>
+
+    <template id="dummy_rows">
+        <div t-att-class="x_row_class" style="color: white !important;">
+            <div class="d-flex flex-row">
+                <div style="width: 50px;">
+                    <span class="pl-1">1</span>
+                </div>
+                <div class="d-flex flex-row">
+                    <div class="" style="width: 165px;"><span>None</span></div>
+                    <div class="text-center" style="width: 139px;"><span>None</span></div>
+                    <div class="text-center" style="width: 125px;"><span>None</span></div>
+                </div>
+                <div style="position: relative;width: 82px;" class="text-center border-left border-dark">
+                    <span style="position: relative;top: 50%;"></span>
+                </div>
+                <div style="width: 302px;" class="d-flex flex-row">
+                    <div class="text-center border-left border-dark" style="width: 75px;"></div>
+                    <div class="border-left border-dark" style="width: 75px;"></div>
+                    <div class="text-center border-left border-dark" style="width: 75px;"></div>
+                    <div class="border-left border-dark" style="width: 75px;"></div>
+                </div>
+            </div>
+            <div class="d-flex flex-row">
+                <div style="width: 50px;"></div>
+                <div style="min-width: 430px;" class="border-right border-dark"><span>None</span></div>
+                <div style="margin-left: 81px;width: 302px;" class="d-flex flex-row">
+                    <div class="text-center border-left border-dark" style="width: 75px;"></div>
+                    <div class="border-left border-dark" style="width: 75px;"></div>
+                    <div class="text-center border-left border-dark" style="width: 75px;"></div>
+                    <div class="border-left border-dark" style="width: 75px;"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <report
+            id="action_report_picking"
+            model="stock.picking"
+            report_type="qweb-pdf"
+            string="Picking Operations (Sale)"
+            name="staples_stock.report_picking"
+            file="staples_stock.report_picking"
+            print_report_name="'%s Picking Operations' % object.sale_id.name"
+            paperformat="staples_base.paperformat_us_letter_picking_operations"
+    />
+</odoo>

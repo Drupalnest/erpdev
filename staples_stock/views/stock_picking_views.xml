@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_picking_withcarrier_out_form" model="ir.ui.view">
+            <field name="name">delivery.stock.picking_withcarrier.form.view</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//group[@name='other_infos']" position="inside">
+                        <field name="carrier_tracking_ref"/>
+                    </xpath>
+                    <div name="button_box" position="inside">
+                        <button type="object" name="open_tracking_url" class="oe_stat_button" icon='fa-truck'
+                                string="Tracking"
+                                attrs="{'invisible': [('carrier_tracking_ref','=',False)]}"/>
+                    </div>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,99 @@
+<odoo>
+    <data>
+        <template id="assets_common" name="staples_check_printing pdf assets" inherit_id="web.report_assets_common">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" type="text/scss"
+                      href="/staples_check_printing/static/src/scss/report_check_commons.scss"/>
+                <link rel="stylesheet" type="text/scss"
+                      href="/staples_check_printing/static/src/scss/report_check_top.scss"/>
+                <link rel="stylesheet" type="text/scss"
+                      href="/staples_check_printing/static/src/scss/report_check_bottom.scss"/>
+                <link rel="stylesheet" type="text/scss"
+                      href="/staples_check_printing/static/src/scss/report_check_middle.scss"/>
+            </xpath>
+        </template>
+        <template id="ckus_check" inherit_id="l10n_us_check_printing.ckus_check">
+            <xpath expr="//div[hasclass('ckus_check')]" position="replace">
+                <div class="ckus_check">
+                    <t t-if="page['state'] == 'cancelled'">
+                        <div class="o-watermark">VOID</div>
+                    </t>
+                    <div class="check-number-top" style="left: 7in;"><strong><t t-esc="o.check_number"/></strong></div>
+                    <small class="check-bank-ref text-small" style="left: 3.5in;"><!--top: 0.25in;">-->
+                        <center>
+                            <strong><t t-esc="o.journal_id.bank_id and o.journal_id.bank_id.name or ''"/><br/><t t-esc="o.journal_id.bank_id and o.journal_id.bank_id.bic or ''"/></strong>
+                        </center>
+                    </small>
+                    <div class="check-address" t-esc="o.company_id.partner_id"
+                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                    <div class="check-pay">
+                        <strong class="check-pay-label">PAY</strong>
+                        <span class="check-pay-amount-in-word" t-esc="page['amount_in_word']"/>
+                    </div>
+                    <div class="check-to-the-order">
+                        <strong class="to-the-order-label">TO<br/>THE<br/>ORDER</strong>
+                        <span class="to-the-order-address" t-esc="page['partner_id']"
+                              t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                    </div>
+                    <div class="table-total">
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <th>DATE</th>
+                                <th>
+                                    <div t-esc="page['payment_date']"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>AMOUNT</th>
+                                <th>
+                                    <t t-esc="page['amount']"/><!--.replace(o.currency_id.symbol, '')-->
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
+<!--
+                    <div class="check-memo">
+                        <strong class="memo-label">MEMO</strong>
+                        <span class="check-memo" t-esc="page['memo']"/>
+                    </div>
+-->
+                    <div class="check-sign">
+                        AUTHORIZED SIGNATURE
+                    </div>
+                    <div class="check-number-bottom">C<t t-esc="o.check_number"/>C A<t t-esc="o.journal_id.bank_account_id and o.journal_id.bank_account_id.aba_routing"/>A <t t-esc="o.journal_id.bank_account_id and o.journal_id.bank_account_id.acc_number"/>C</div>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="ckus_stub" inherit_id="l10n_us_check_printing.ckus_stub">
+            <xpath expr="//div[hasclass('sequence_number')]/span" position="replace">
+                <span t-esc="o.check_number"/>
+            </xpath>
+            <xpath expr="//div[hasclass('summary_line')]/div[1]" position="attributes">
+                <attribute name="class">col-6 text-left</attribute>
+            </xpath>
+            <xpath expr="//div[hasclass('summary_line')]/div[2]" position="attributes">
+                <attribute name="class">col-4 text-middle</attribute>
+            </xpath>
+            <xpath expr="//div[hasclass('summary_line')]/div[3]" position="attributes">
+                <attribute name="class">col-2 text-right sequence_number</attribute>
+            </xpath>
+            <xpath expr="//table[hasclass('stub_lines')]/thead/tr//th[1]" position="replace">
+                <th class="text-left">Invoice Date</th>
+            </xpath>
+            <xpath expr="//table[hasclass('stub_lines')]/thead/tr//th[2]" position="replace">
+                <th class="text-left">Invoice Number</th>
+            </xpath>
+            <xpath expr="//table[hasclass('stub_lines')]/thead/tr//th[4]" position="replace">
+                <th class="text-right">Discount Allowed</th>
+            </xpath>
+            <xpath expr="//tbody/t/t/tr/td/t" position="replace">
+                <t t-if="stub_line['invoice_date']" t-esc="stub_line['invoice_date']" t-options="{'widget': 'date'}"/>
+            </xpath>
+            <xpath expr="//tbody/t/t/tr/td[4]/t" position="replace">
+                <t t-if="stub_line['discount_amount']" t-esc="stub_line['discount_amount']"/>
+                <t t-else="">-</t>
+            </xpath>
+        </template>
+    </data>
+</odoo>

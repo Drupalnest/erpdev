@@ -1,0 +1,44 @@
+.staples_account{
+    font-size: 14px;
+    table {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    td, th {
+        padding: 3px !important;
+    }
+    tr {
+        page-break-inside: avoid;
+        page-break-before: auto;
+    }
+    .border-all td, .border-all th{
+        border: 1px solid black !important;
+    }
+    .border-none td, .border-none th{
+        border: 0 !important;
+    }
+    .th-border-all th{
+        border: 1px solid black !important;
+    }
+    .td-border-left td{
+        border-left: 1px solid black !important;
+    }
+    .td-border-left tr > td:last-child{
+        border-right: 1px solid black !important;
+    }
+    .td-border-left tr:last-child > td{
+        border-bottom: 1px solid black !important;
+    }
+    .td-border-top-none tr:first-child > td {
+        border-top: 0 !important;
+    }
+    ul.custom-footer {
+        list-style:none;
+        display: inline;
+        padding-left: 0;
+        li {
+            display: inline;
+            margin-right: 5px;
+        }
+    }
+}

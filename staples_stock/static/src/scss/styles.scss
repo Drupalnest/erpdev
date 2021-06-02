@@ -1,0 +1,27 @@
+.picking-operations-table {
+    border: 1px solid black !important;
+    th, td {
+        padding: 1px !important;
+        height: 25px;
+    }
+    th:not(.br-none), td:not(.br-none) {
+        border-right: 1px solid black !important;
+    }
+    th:not(.bb-none), td:not(.bb-none) {
+        border-bottom: 1px solid black !important;
+    }
+    .ctn_no {
+        width: 65px;
+    }
+    .ctn_qty {
+        width: 90px;
+    }
+}
+.picking_operations_header {
+    font-family: auto;
+    font-style: italic;
+
+    h5 {
+        margin-bottom: 0 !important;
+    }
+}

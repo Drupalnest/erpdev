@@ -1,0 +1,108 @@
+<odoo>
+    <data>
+        <record id="commission_release_form" model="ir.ui.view">
+            <field name="name">commission.release form</field>
+            <field name="model">commission.release</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_confirm" string="Confirm" type="object" class="btn-primary" states="new"/>
+                        <button name="action_invoice" string="Make Invoice" type="object" class="btn-primary"
+                                states="confirmed"/>
+                        <button name="cancel" string="Cancel" type="object" class="btn-primary" states="new,confirmed"/>
+                        <button name="set_to_draft" string="Reset to Draft" class="btn-primary" type="object"
+                                states="cancel"/>
+                        <field name="state" widget="statusbar" statusbar_visible="new,confirmed,invoice,cancel"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date_from" string="From"/>
+                                <field name="date_to" string="To"/>
+                            </group>
+                            <group>
+                                <field name="company_id" options="{'no_open': True, 'no_create': True}" groups="base.group_multi_company"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Settlements">
+                                <field name="line_ids" readonly="1" widget="one2many">
+                                    <form readonly="1">
+                                        <header>
+                                            <button name="print_line" class="btn-primary" string="Print" type="object"/>
+                                        </header>
+                                        <group>
+                                            <field name="agent_id" string="Agent"/>
+                                            <field name="bill_id" string="Bill "/>
+                                            <field name="overall_commission_amount" string="Commission Total "/>
+                                        </group>
+                                        <group>
+                                            <field name="commission_invoice_ids" readonly="1">
+                                                <tree>
+                                                    <field name="state" invisible="1"/>
+                                                    <field name="invoice_date" string="Invoice Date"/>
+                                                    <field name="name" string="Source"/>
+                                                    <field name="partner_id" string="Customer"/>
+                                                    <field name="commission" string="Commission (%)"/>
+                                                    <field name="amount_commission" string="Commission Amount"/>
+                                                </tree>
+                                            </field>
+                                        </group>
+                                    </form>
+                                    <tree>
+                                        <field name="agent_id" string="Agent"/>
+                                        <field name="overall_commission_amount" string="Commission Total "/>
+                                        <button name="print_line" class="fa fa-print" type="object"/>
+                                    </tree>
+
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
+        <record id="view_commission_release_tree" model="ir.ui.view">
+            <field name="name">commission.release.tree</field>
+            <field name="model">commission.release</field>
+            <field name="arch" type="xml">
+                <tree import="false">
+                    <field name="name"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="currency_id" groups="base.group_multi_currency"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="state" string="Status"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+        <!--  Action for Collection Forecast Form -->
+        <record id="action_commission_release" model="ir.actions.act_window">
+            <field name="name">Commission Release</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">commission.release</field>
+
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+
+        </record>
+
+
+        <menuitem name="Commission Release" id="menu_commission_release"
+                  parent="menu_sale_commissions_management"
+                  action="action_commission_release"
+        />
+    </data>
+</odoo>

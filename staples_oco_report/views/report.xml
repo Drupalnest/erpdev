@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <report
+                id="action_report_open_customer_order"
+                model="account.common.journal.report"
+                string="Open Customer Orders"
+                report_type="qweb-pdf"
+                name="staples_oco_report.report_open_customer_order"
+                file="staples_oco_report.report_open_customer_order"
+        />
+    </data>
+</odoo>

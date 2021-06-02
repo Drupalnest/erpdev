@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ship_via_form_view" model="ir.ui.view">
+            <field name="name">ship.via.form</field>
+            <field name="model">ship.via</field>
+            <field name="arch" type="xml">
+                <form string="Ship via form view">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="service_code"/>
+                            <field name="collect"/>
+                        </group>
+                        <div>
+                            <label for="comment"/>
+                            <field name="comment"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="ship_via_tree_view" model="ir.ui.view">
+            <field name="name">ship.via.tree</field>
+            <field name="model">ship.via</field>
+            <field name="arch" type="xml">
+                <tree string="Ship via list view">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="service_code"/>
+                    <field name="collect"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="ship_via_search_view" model="ir.ui.view">
+            <field name="name">ship.via.search</field>
+            <field name="model">ship.via</field>
+            <field name="arch" type="xml">
+                <search string="Ship via search view">
+                    <field name="name"/>
+                    <field name="description"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="ship_via_act_window" model="ir.actions.act_window">
+            <field name="name">Ship via</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ship.via</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Ship via" id="ship_via_menu" parent="sale.menu_sale_config" action="ship_via_act_window"/>
+
+    </data>
+</odoo>

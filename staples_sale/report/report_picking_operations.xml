@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_picking_operations_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="staples_web.picking_operations_layout">
+                    <t t-set="order_barcode">
+                        <img alt="barcode"
+                             t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;humanreadable=%s' % ('Code128', o.name, 1)"/>
+                    </t>
+                    <div class="page" style="font-size:14px;">
+                        <div class="row mt-1">
+                            <div class="col-6">
+                                <strong>Ship To:</strong>
+                                <div t-field="o.partner_shipping_id"
+                                     t-options="{'widget': 'contact', 'fields': ['address', 'name'], 'no_marker': True}"/>
+                                <div class="w-100 mt-2"/>
+                                <strong>Bil To:</strong>
+                                <div t-field="o.partner_invoice_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Order Date<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span t-field="o.date_order"
+                                              t-options='{"widget": "date"}'/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Customer No.<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span t-field="o.partner_id.ref"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Cust. Ord. No.<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span t-field="o.client_order_ref"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Date Required<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span t-field="o.commitment_date"
+                                              t-options='{"widget": "date"}'/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Ship via<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span/>
+                                        <span t-field="o.shipvia_id"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>FOB Code<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span/>
+                                        <span t-field="o.fob_id"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 text-right p-0">
+                                        <strong>Salesman<span class="p-2">:</span></strong>
+                                    </div>
+                                    <div class="col-6 text-left p-0">
+                                        <span t-field="o.user_id.name"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table picking-operations-table table-borderless mt-2" style="font-size:12px;">
+                            <thead>
+                                <tr>
+                                    <th class="align-middle text-left br-none" style="width: 50px;">LINE</th>
+                                    <th class="align-middle text-left br-none" style="width: 150px;">STYLE CODE</th>
+                                    <th class="align-middle text-center br-none">U/M</th>
+                                    <th class="align-middle text-right">QTY ORDERED</th>
+                                    <th rowspan="2" class="align-middle text-center" style="width: 80px">QTY SHIPPED</th>
+                                    <th colspan="4" class="text-center align-middle">SHIPPED PIECES X YARDS</th>
+                                </tr>
+                                <tr>
+                                    <th class="br-none"/>
+                                    <th colspan="3" class="align-middle">DESCRIPTION</th>
+                                    <th class="ctn_no align-middle text-center">CTN. NO.</th>
+                                    <th class="ctn_qty align-middle"/>
+                                    <th class="ctn_no align-middle text-center">CTN. NO.</th>
+                                    <th class="ctn_qty align-middle"/>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="l_count" t-value="1"/>
+                                <t t-foreach="o.order_line" t-as="l">
+                                    <t t-if="not l.display_type">
+                                        <tr>
+                                            <td class="align-middle text-center br-none bb-none">
+                                                <t t-esc="l_count"/>
+                                            </td>
+                                            <td class="align-middle br-none bb-none">
+                                                <t t-esc="l.product_id.default_code"/>
+                                            </td>
+                                            <td class="align-middle text-center br-none bb-none">
+                                                <span t-field="l.product_uom"/>
+                                            </td>
+                                            <td class="align-middle text-center bb-none">
+<!--                                                <span t-field="l.product_uom_qty"/>-->
+                                                <span t-esc="'{0:.2f}'.format(l.product_uom_qty)"/>
+                                            </td>
+                                            <td rowspan="2" class="text-right"/>
+                                            <td rowspan="2" class="ctn_no"/>
+                                            <td rowspan="2" class="ctn_qty"/>
+                                            <td rowspan="2" class="ctn_no"/>
+                                            <td rowspan="2" class="ctn_qty"/>
+                                        </tr>
+                                        <tr>
+                                            <td class="br-none"/>
+                                            <td colspan="3" class="align-middle">
+                                                <t t-esc="l.product_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <t t-set="l_count" t-value="l_count+1"/>
+                                    </t>
+                                    <t t-if="l.display_type == 'line_section'">
+                                        <td name="td_section_line" colspan="99">
+                                            <span t-field="l.name"/>
+                                        </td>
+                                        <t t-set="current_section" t-value="l"/>
+                                        <t t-set="current_subtotal" t-value="0"/>
+                                    </t>
+                                    <t t-if="l.display_type == 'line_note'">
+                                        <tr>
+                                            <td name="td_note_line" colspan="99">
+                                            <span t-field="l.name"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-set="dummy_rows" t-value="12-len(o.order_line)"/>
+                                <t t-if="dummy_rows > 0" t-foreach="range(dummy_rows)" t-as="i">
+                                    <tr>
+                                        <td colspan="4" rowspan="2"/>
+                                        <td rowspan="2" class="text-right"/>
+                                        <td class="ctn_no bb-none"/>
+                                        <td class="ctn_qty bb-none"/>
+                                        <td class="ctn_no bb-none"/>
+                                        <td class="ctn_qty bb-none"/>
+                                    </tr>
+                                    <tr>
+                                        <td class="ctn_no"/>
+                                        <td class="ctn_qty"/>
+                                        <td class="ctn_no"/>
+                                        <td class="ctn_qty"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" style="height:70px;">TOTAL PACKAGES</td>
+                                    <td style="height:70px;">ORDER COMPLETED</td>
+                                    <td style="height:70px;">BALANCE TO FOLLOW</td>
+                                    <td style="height:70px;" colspan="2">PULLED BY</td>
+                                    <td style="height:70px;" colspan="2">PACKED BY</td>
+                                    <td style="height:70px;"/>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report
+            id="action_report_picking_operations"
+            model="sale.order"
+            report_type="qweb-pdf"
+            string="Picking Operations"
+            name="staples_sale.report_picking_operations_document"
+            file="staples_sale.report_picking_operations_document"
+            print_report_name="'%s Picking Operations' % object.name"
+            paperformat="staples_base.paperformat_us_letter_picking_operations"
+    />
+</odoo>

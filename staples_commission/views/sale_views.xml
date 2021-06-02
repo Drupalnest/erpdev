@@ -1,0 +1,43 @@
+<odoo>
+    <data>
+        <record id="view_sales_order_filter" model="ir.ui.view">
+            <field name="name">sale.order.list.select</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+
+                <filter name="salesperson" position="attributes">
+                    <attribute name="context">{'group_by': 'agent_id'}</attribute>
+                    <attribute name="string">Salesman</attribute>
+                </filter>
+
+            </field>
+        </record>
+        <record id="view_order_form" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+                <!--add amount commission at the bottom of the order form-->
+                <field name="amount_total" position="after">
+                    <field name="amount_commission"/>
+                </field>
+
+
+            </field>
+        </record>
+        <record id="view_order_tree" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="amount_commission" string="Commission" sum="Commission" optional="show"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

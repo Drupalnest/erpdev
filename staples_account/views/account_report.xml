@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+        <!-- QWeb Reports -->
+        <report
+                id="account_invoices_staples"
+                model="account.move"
+                string="Invoices"
+                report_type="qweb-pdf"
+                name="staples_account.report_invoice_staples"
+                file="staples_account.report_invoice_staples"
+                attachment="(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')"
+                print_report_name="(object._get_report_base_filename())"
+                paperformat="staples_base.paperformat_us_letter_invoice"
+                groups="account.group_account_invoice"
+        />
+    </data>
+</odoo>

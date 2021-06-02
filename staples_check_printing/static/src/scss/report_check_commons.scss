@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'micrenc';
+    src: url('../lib/fonts/micrenc.ttf');
+}
+.check-number-bottom {
+    font-family: micrenc;
+    font-weight: bold;
+    font-size: x-large;
+    left: 1.5in;
+    top: 2.75in;
+}
+
+.ckus_page {
+    .ckus_stub .summary_line span {
+        padding: 0 !important;
+    }
+}

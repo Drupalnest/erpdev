@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="picking_operations_layout">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+            <div class="picking_operations_header">
+                <div class="row mb8">
+                    <div class="col-6">
+                        <h3 class="text-uppercase" t-field="company.name"/>
+                        <h5 class="text-uppercase" t-field="company.street"/>
+                        <h5 class="text-uppercase" t-field="company.street2"/>
+                        <h5 class="text-uppercase"><span t-field="company.city"/>, <span
+                                t-field="company.state_id.code"/>-<span t-field="company.zip"/></h5>
+                        <h5>
+                            <span>Ph: <span t-field="company.phone"/></span>
+                            <span class="ml-3">Fax: <span t-field="company.fax"/></span>
+                        </h5>
+                    </div>
+                    <div class="col-6 text-right">
+                        <t t-raw="order_barcode"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+             t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-raw="0"/>
+        </div>
+    </template>
+    <template id="invoice_layout">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+        <div t-attf-class="header o_company_#{company.id}_layout #{classes}" t-att-style="report_header_style">
+            <div class="row">
+                <div class="col text-center text-white bg-dark font-weight-bold">
+                    <h4 class="mb-0">INVOICE</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 font-italic" style="font-family: auto;line-height: normal;">
+                    <div>
+                        <div style="font-size: 26px;">
+                            <span t-field="o.company_id.name"/>
+                        </div>
+                        <div style="font-size: 18px;">
+                            <div class="d-flex align-items-baseline">
+                                <div class="w-100">
+                                    <t t-esc="o.company_id.street"/><br/>
+                                    <t t-esc="o.company_id.street2"/><br/>
+                                    <t t-esc="o.company_id.city"/>, <t t-esc="o.company_id.state_id.code"/>-<t
+                                        t-esc="o.company_id.zip"/><br/>
+                                    Ph: <t t-esc="o.company_id.phone"/><span class="ml-3">Fax: <t
+                                        t-esc="o.company_id.fax"/></span><br/>
+                                    Email: <t t-esc="o.company_id.email"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-6 text-right p-0">
+                            <strong>Invoice Number<span class="p-2">:</span></strong>
+                        </div>
+                        <div class="col-6 text-left p-0">
+                            <span t-field="o.name"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right p-0">
+                            <strong>Invoice Date<span class="p-2">:</span></strong>
+                        </div>
+                        <div class="col-6 text-left p-0">
+                            <span t-field="o.invoice_date"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right p-0">
+                            <strong>Page Number<span class="p-2">:</span></strong>
+                        </div>
+                        <div class="col-6 text-left p-0">
+                            <span class="page"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right p-0">
+                            <strong>Customer No<span class="p-2">:</span></strong>
+                        </div>
+                        <div class="col-6 text-left p-0">
+                            <span t-field="o.partner_id.ref"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right p-0">
+                            <strong>Order No<span class="p-2">:</span></strong>
+                        </div>
+                        <div class="col-6 text-left p-0">
+                            <span t-field="o.invoice_origin"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-right p-0">
+                            <strong>Payment Status<span class="p-2">:</span></strong>
+                        </div>
+                        <div class="col-6 text-left p-0">
+                            <span t-field="o.invoice_payment_state"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div t-attf-class="article #{classes}" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+             t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-raw="0"/>
+        </div>
+        <div t-attf-class="footer #{classes}" style="font-size: 12px;">
+            <div class="text-center">
+                <h5 class="mb-0">VISIT OUR WEBSITE <span t-field="company.website"/></h5>
+                <t t-if="custom_footer" t-raw="custom_footer"/>
+            </div>
+        </div>
+    </template>
+    <template id="internal_layout" inherit_id="web.internal_layout">
+        <xpath expr="//div[hasclass('header')]/div[hasclass('row')]/div[1]/span" position="attributes">
+            <attribute name="t-esc">context_timestamp(datetime.datetime.now()).strftime('%m/%d/%Y %H:%M:%S')</attribute>
+        </xpath>
+        <xpath expr="(//div[hasclass('header')]/div[hasclass('row')]/div)[2]" position="attributes">
+            <attribute name="class">col-6 text-center</attribute>
+        </xpath>
+        <xpath expr="(//div[hasclass('header')]/div[hasclass('row')]/div)[3]" position="attributes">
+            <attribute name="class">col-3 text-right</attribute>
+        </xpath>
+    </template>
+</odoo>

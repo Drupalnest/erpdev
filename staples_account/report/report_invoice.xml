@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice_staples_document">
+        <t t-set="classes" t-value="'staples_account'"/>
+        <t t-set="custom_footer">
+            <ul class="custom-footer">
+                <li><i class="fa fa-star"></i> Sewing Thread</li>
+                <li><i class="fa fa-star"></i> Hook &amp; Loop Fasteners</li>
+                <li><i class="fa fa-star"></i> YKK Zippers</li>
+                <li><i class="fa fa-star"></i> Elastic</li>
+                <li><i class="fa fa-star"></i> Labels</li>
+                <li><i class="fa fa-star"></i> Reflective Tapes</li>
+                <li><i class="fa fa-star"></i> Polypropylene</li>
+                <li><i class="fa fa-star"></i> Webbing</li>
+                <li><i class="fa fa-star"></i> Custom Strap Fabricating</li>
+            </ul>
+        </t>
+        <t t-call="staples_web.invoice_layout">
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <div class="page">
+                <div class="row mt-4 mb-4" style="font-size: 17px;">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-3">
+                                <strong>Bill To:</strong>
+                            </div>
+                            <div class="col">
+                                <strong><address t-field="o.partner_id"
+                                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/></strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-3">
+                                <strong>Ship to:</strong>
+                            </div>
+                            <div class="col">
+                                <strong><address t-field="o.partner_shipping_id"
+                                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="text-center border-all mb-1" style="font-size: 15px;">
+                    <tr>
+                        <td>SALESPERSON</td>
+                        <td>CUST. ORD. NO.</td>
+                        <td>DATE SHIPPED</td>
+                        <td>PORT NO.</td>
+                        <td>SHIPPED VIA</td>
+                        <td>FOB</td>
+                        <td>TERMS</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span t-field="o.agent_id"/>
+                        </td>
+                        <td><span t-esc="o._get_cust_ord_no()"/></td>
+                        <td><span t-esc="o._get_date_shipped()" t-options='{"widget": "date"}'/></td>
+                        <td><span t-esc="o.port_no"/></td>
+                        <td>
+                            <span t-field="o.shipvia_id"/>
+                        </td>
+                        <td>
+                            <span t-field="o.fob_id"/>
+                        </td>
+                        <td>
+                            <span t-field="o.invoice_payment_term_id"/>
+                        </td>
+                    </tr>
+                </table>
+                <table class="td-border-left th-border-all mb-0" style="font-size: 15px;">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 30px;">LN. NO.</th>
+                            <th class="text-center" style="width: 50px;">QTY ORDERED</th>
+                            <th class="text-center" style="width: 50px;">QTY SHIPPED</th>
+                            <th class="text-center" style="width: 75px;">ITEM NUMBER</th>
+                            <th class="align-middle">DESCRIPTION</th>
+                            <th class="text-center" style="width: 60px;">UNIT PRICE</th>
+                            <th class="text-left" style="width: 60px;">U/M</th>
+                            <th class="text-center" style="width: 75px;">EXTENDED PRICE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="l_no" t-value="1"/>
+                        <t t-foreach="o.invoice_line_ids.filtered(lambda x: not x.product_id.is_commission_free)" t-as="l">
+                            <t t-if="not l.display_type">
+                                <tr>
+                                    <td class="text-center">
+                                        <t t-esc="l_no"/>
+                                    </td>
+                                    <td class="text-right">
+<!--                                        <span t-esc="l._get_qty_ordered()"/>-->
+                                        <span t-esc="'{0:.2f}'.format(l._get_qty_ordered())"/>
+                                    </td>
+                                    <td class="text-right">
+<!--                                        <span t-esc="l._get_qty_delivered()"/>-->
+                                        <span t-esc="'{0:.2f}'.format(l.quantity)"/>
+                                        <!--<span t-esc="'{0:.2f}'.format(l._get_qty_delivered())"/>-->
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-field="l.product_id.default_code"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="l.product_id.name"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="l.price_unit"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="l.product_uom_id"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="'%.2f'% l.price_subtotal"/>
+                                    </td>
+                                </tr>
+                                <t t-set="l_no" t-value="l_no + 1"/>
+                            </t>
+                        </t>
+                        <t t-set="dummy_rows" t-value="17-len(o.invoice_line_ids)"/>
+                        <t t-if="dummy_rows > 0" t-foreach="range(dummy_rows)" t-as="i">
+                            <tr>
+                                <td><div style="min-height: 25px;"/></td>
+                                <td><div style="min-height: 25px;"/></td>
+                                <td><div style="min-height: 25px;"/></td>
+                                <td><div style="min-height: 25px;"/></td>
+                                <td><div style="min-height: 25px;"/></td>
+                                <td><div style="min-height: 25px;"/></td>
+                                <td><div style="min-height: 25px;"/></td>
+                                <td><div style="min-height: 25px;"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <div class="clearfix" style="font-size: 15px;">
+                    <div class="row">
+                        <div class="col-3 ml-auto">
+                            <table class="border-all td-border-top-none" style="page-break-inside: avoid;width: 207px;float: right;">
+                                <tr>
+                                    <td class="text-right" style="width: 123px;">
+                                        <strong>SUBTOTAL</strong>
+                                    </td>
+                                    <td class="text-right" style="width: 88px;">
+                                        <strong t-esc="'%.2f'% (o.amount_untaxed - sum(o.invoice_line_ids.filtered(lambda x: x.product_id.is_commission_free).mapped('price_subtotal')))"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>DISCOUNT</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-esc="'%.2f'% o.amount_discount"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>MISC. CHARGES</strong>
+                                    </td>
+                                    <td class="text-right"/>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>FREIGHT</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-esc="'%.2f'% o.amount_delivery"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>PRE-PAYMENT</strong>
+                                    </td>
+                                    <td class="text-right"/>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>TOTAL</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-esc="'%.2f'% o.amount_total"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_invoice_staples">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang"
+                   t-value="o.invoice_user_id.sudo().lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
+                <t t-call="staples_account.report_invoice_staples_document" t-lang="lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>
